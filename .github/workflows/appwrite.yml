@@ -1,28 +1,35 @@
-# This is a basic workflow to help you get started with Actions
+name: CI - appwrite - Soutenance
 
-name: CI - appwrite
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches: [ "master", "main" ]
+    
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
-      - uses: appwrite/setup-for-actions@v1
+      - name: Setup .NET Core SDK 5.0
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: '5.0'
+      - name: Setup Appwrite CLI
+        uses: appwrite/setup-for-actions@v1
+        with:
+          endpoint: 'https://localhost:83/v1'
+          project: '63cede4a4747ce750b8a'
+          key: '${{ secrets.APPWRITE_API_KEY }}'
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+      - name: Deploy
+        run: |
+          appwrite functions createTag \
+            --functionId="60292830c4571" \
+            --command="dotnet appwrite-dotnet-function-example.dll" \
+            --code="bin/Release/net5.0/" 
