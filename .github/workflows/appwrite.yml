@@ -24,6 +24,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      
+      - uses: appwrite/setup-for-actions@v1
+        with:
+          endpoint: 'https://[HOSTNAME_OR_IP]/v1'
+          project: '${{ secrets.APPWRITE_PROJECT }}'
+          key: '${{ secrets.APPWRITE_API_KEY }}'
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -34,6 +40,4 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-      - name: Setup Appwrite CLI
-        uses: appwrite/setup-for-actions@v1
 
