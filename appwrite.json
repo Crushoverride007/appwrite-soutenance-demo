@@ -1,0 +1,21 @@
+{
+    "projectId": "63cede4a4747ce750b8a",
+    "projectName": "",
+    "functions": [
+        {
+            "$id": "63df21a835d84ccf1b54",
+            "name": "tp-functions",
+            "runtime": "node-16.0",
+            "path": "functions/tp-functions",
+            "entrypoint": "src/index.js",
+            "ignore": [
+                "node_modules",
+                ".npm"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
+        }
+    ]
+}
